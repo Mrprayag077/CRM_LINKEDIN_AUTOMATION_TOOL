@@ -294,7 +294,7 @@ async function loginToLunchclub() {
 
 //loginToLunchclub();
 
-var profileLinks = ['https://www.linkedin.com/in/ayyadurai-b-5313b2154/', 'https://www.linkedin.com/in/daison-sebastian-735134225/'];
+var profileLinks = ['https://www.linkedin.com/in/harshit-sharma-b6b25a222/', 'https://www.linkedin.com/in/mayank-deshmukh-396223269/'];
 
 async function linkined() {
     const browser = await puppeteer.launch({ headless: false });
@@ -331,16 +331,16 @@ async function linkined() {
     await button[0].click();
 
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3200));
 
 
 
     const serachButton = await page.$('.search-global-typeahead__collapsed-search-button');
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1800));
     await serachButton.click();
 
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1050));
 
 
     const serachInput = await page.$('.search-global-typeahead__input');
@@ -349,83 +349,192 @@ async function linkined() {
 
 
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2300));
     //   await page.goto('https://www.linkedin.com/company/noveracion-global/');
     // Open a new tab
 
-
+    //new browser
     const newTab = await browser.newPage();
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
 
 
-    // for (let i = 0; i < profileLinks.length; i++) {
+    for (let i = 0; i < profileLinks.length; i++) {
 
 
-    // Navigate to the link
-    // await newTab.goto('https://www.linkedin.com/company/noveracion-global/');
+        // Navigate to the link
+        // await newTab.goto('https://www.linkedin.com/company/noveracion-global/');
 
 
-    await newTab.goto('https://www.linkedin.com/in/vedantguptaa/');
-    // await newTab.goto(profileLinks[i]);
-
-    // await newTab.setViewport({ width: 1280, height: 720, deviceScaleFactor: 0.7 });
+        //  await newTab.goto('https://www.linkedin.com/in/divyanshu-sahu-820467245/');
 
 
 
+        await newTab.goto(profileLinks[i]);
 
-    //page down
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const button_more_collapse = await newTab.$$('button.artdeco-dropdown__trigger');
-    await button_more_collapse[2].click();
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
+        // await newTab.setViewport({ width: 1280, height: 720, deviceScaleFactor: 0.7 });
 
 
-    //connect button click  WORKIN---div.artdeco-dropdown__item
-
-    const button_more_connect_part = await newTab.$$('div.artdeco-dropdown__item');
-    // const button_more_connect_part = await newTab.$$('btn.artdeco-button');
-    await button_more_connect_part[7].click();
 
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+        //page down
+        await new Promise(resolve => setTimeout(resolve, 2400));
 
-    // await newTab.waitForSelector(
-    //     '[class="artdeco-button artdeco-button--muted artdeco-button--2 artdeco-button--secondary ember-view mr1"]'
-    // );
+        //   const button_more_collapse = await newTab.$$('button.artdeco-dropdown__trigger');
+        //    await button_more_collapse[2].click();
 
-    // const button111 = await newTab.$$('[class="artdeco-button artdeco-button--muted artdeco-button--2 artdeco-button--secondary ember-view mr1"]')
-    // await button111[0].click();
-
-
-    // const button_add_a_note_popup = await newTab.$$('button.artdeco-button');
-    // await button_add_a_note_popup[4].click();  
-
-    await newTab.waitForSelector('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(1)');
-    const buttonnew = await newTab.$('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(1)');
-    await buttonnew.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
 
-    await newTab.waitForSelector('#custom-message');
-    const connect_note_send_message_ = await newTab.$('#custom-message');
-    await connect_note_send_message_.type('Hello, I would like to connect with you!');
+        //connect button click  WORKIN---div.artdeco-dropdown__item
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+        //   const button_more_connect_part = await newTab.$$('btn.artdeco-button');
 
-    await newTab.waitForSelector('.artdeco-modal__actionbar');
-    const button_send_note_message = await newTab.$('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(2)');
-    await button_send_note_message.click();
-
-    await new Promise(resolve => setTimeout(resolve, 9000));
-
-    // Close the browser
-    //await browser.close();
+        // const button_more_connect_part = await newTab.$$('btn.artdeco-button');
+        //   await button_more_connect_part[7].click();
 
 
-    // }
+        // Click the button
+
+
+        // await newTab.click('.artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action');
+
+
+
+        const followButton = await newTab.$('.artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action');
+        const followButtonText = await newTab.evaluate(followButton => followButton.textContent, followButton);
+
+        console.log(`"${followButtonText}"`);
+
+        try {
+            if (followButtonText.includes('Follow')) {
+                console.log('Follow if detected');
+
+
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                const button_more_collapse = await newTab.$$('button.artdeco-dropdown__trigger');
+                await button_more_collapse[2].click();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+
+                //connect button click  WORKIN---div.artdeco-dropdown__item
+
+                const button_more_connect_part = await newTab.$$('div.artdeco-dropdown__item');
+                // const button_more_connect_part = await newTab.$$('btn.artdeco-button');
+                await button_more_connect_part[7].click();
+
+
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+                add_a_note();
+            }
+
+            else if (followButtonText.includes('Connect')) {
+                console.log('NOO Follow button detected going to three dot menu');
+                await followButton.click();
+
+                add_a_note();
+
+            }
+
+        } catch (err) {
+            console.log(err);
+
+        }
+
+
+
+        //await followButton.click();
+
+
+        async function add_a_note() {
+
+            await newTab.waitForSelector('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(1)');
+            const buttonnew = await newTab.$('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(1)');
+            await buttonnew.click();
+
+
+            await newTab.waitForSelector('#custom-message');
+            const connect_note_send_message_ = await newTab.$('#custom-message');
+            await connect_note_send_message_.type('Hello, I would like to connect with you!');
+
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            await newTab.waitForSelector('.artdeco-modal__actionbar');
+            const button_send_note_message = await newTab.$('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(2)');
+            await button_send_note_message.click();
+
+            await new Promise(resolve => setTimeout(resolve, 9000));
+
+        };
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+
+
+        //  const profile_page_button = await newTab.$('.artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action');
+        // await newTab.waitForSelector('.artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action');
+        // await profile_page_button.click();
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        // await newTab.waitForSelector(
+        //     '[class="artdeco-button artdeco-button--muted artdeco-button--2 artdeco-button--secondary ember-view mr1"]'
+        // );
+
+        // const button111 = await newTab.$$('[class="artdeco-button artdeco-button--muted artdeco-button--2 artdeco-button--secondary ember-view mr1"]')
+        // await button111[0].click();
+
+
+        // const button_add_a_note_popup = await newTab.$$('button.artdeco-button');
+        // await button_add_a_note_popup[4].click();  
+
+
+
+
+
+
+
+
+
+
+        // commented
+        // await newTab.waitForSelector('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(1)');
+        // const buttonnew = await newTab.$('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(1)');
+        // await buttonnew.click();
+
+
+        // await newTab.waitForSelector('#custom-message');
+        // const connect_note_send_message_ = await newTab.$('#custom-message');
+        // await connect_note_send_message_.type('Hello, I would like to connect with you!');
+
+        // await new Promise(resolve => setTimeout(resolve, 3000));
+
+        // await newTab.waitForSelector('.artdeco-modal__actionbar');
+        // const button_send_note_message = await newTab.$('div.artdeco-modal__actionbar button.artdeco-button:nth-of-type(2)');
+        // await button_send_note_message.click();
+
+
+
+
+
+
+
+
+
+
+
+
+        await new Promise(resolve => setTimeout(resolve, 9000));
+
+        // Close the browser
+        //await browser.close();
+
+
+    }
 }
 
 

@@ -294,7 +294,7 @@ async function loginToLunchclub() {
 
 //loginToLunchclub();
 
-var profileLinks = ['https://www.linkedin.com/in/harshit-sharma-b6b25a222/', 'https://www.linkedin.com/in/mayank-deshmukh-396223269/'];
+var profileLinks = ['https://www.linkedin.com/in/anvesha-agarwal-993a99226/', 'https://www.linkedin.com/in/shubhayu64/'];
 
 async function linkined() {
     const browser = await puppeteer.launch({ headless: false });
@@ -331,16 +331,16 @@ async function linkined() {
     await button[0].click();
 
 
-    await new Promise(resolve => setTimeout(resolve, 3200));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
 
 
     const serachButton = await page.$('.search-global-typeahead__collapsed-search-button');
-    await new Promise(resolve => setTimeout(resolve, 1800));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     await serachButton.click();
 
 
-    await new Promise(resolve => setTimeout(resolve, 1050));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
 
     const serachInput = await page.$('.search-global-typeahead__input');
@@ -349,14 +349,14 @@ async function linkined() {
 
 
 
-    await new Promise(resolve => setTimeout(resolve, 2300));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     //   await page.goto('https://www.linkedin.com/company/noveracion-global/');
     // Open a new tab
 
-
+    //new browser
     const newTab = await browser.newPage();
 
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
 
 
@@ -379,7 +379,7 @@ async function linkined() {
 
 
         //page down
-        await new Promise(resolve => setTimeout(resolve, 2400));
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         //   const button_more_collapse = await newTab.$$('button.artdeco-dropdown__trigger');
         //    await button_more_collapse[2].click();
