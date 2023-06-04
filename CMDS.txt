@@ -1,0 +1,4 @@
+git commit -m 'added db connection pass data'
+
+git add .\app.js .\package.json .\package-lock.json .\.env .\pages\ '.\app copy 2.js'
+
