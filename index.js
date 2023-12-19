@@ -47,7 +47,7 @@ mongoose.set("strictQuery", false);
 // async function main() {
 mongoose
   .connect(
-    "mongodb+srv://prayagnew_intern_proj:ukLJ4aCS47sBJUQ8@cluster0.as6xaod.mongodb.net/ats_linkedin_proj?retryWrites=true&w=majority",
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.as6xaod.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
 
     // "mongodb+srv://prayag_SIHH:pp1234@cluster0.tuna9.mongodb.net/ats_linkedin?retryWrites=true&w=majority",
 
