@@ -6,7 +6,9 @@
 
 ## Tech Stack
 
-| PART     | TECHNOLOGIES                                                                                  |
-| :------- | :-------------------------------------------------------------------------------------------- |
-| `Client` | **Html, Ejs, Ajax**                                                                           |
-| `Server` | **Node.js, Puppeteer.js, Authentication, Express-Session, DotEnv, Mongoose, , Mongodb-Atlas** |
+| PART       | TECHNOLOGIES                                                                 |
+| :--------- | :--------------------------------------------------------------------------- |
+| `Client`   | **Html, Ejs, Ajax**                                                          |
+| `Server`   | **Node.js, Puppeteer.js, Authentication, Express-Session, DotEnv, Mongoose** |
+| `Database` | **Mongodb-Atlas**                                                            |
+| `Security` | **Bcrypt Encryption**                                                        |
