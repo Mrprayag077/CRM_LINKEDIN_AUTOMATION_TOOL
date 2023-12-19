@@ -1,0 +1,34 @@
+<div class="display-flex flex-column full-width align-self-center">
+    <div class="display-flex flex-row justify-space-between">
+        <div class="
+          display-flex flex-column full-width">
+    
+        <div class="display-flex flex-wrap align-items-center full-height">
+              <span class="mr1 t-bold">
+                <span aria-hidden="true"><!---->Technical Team Member<!----></span>
+                
+                <span class="visually-hidden"><!---->Technical Team Member<!----></span>
+              </span>
+<!----><!----><!---->        </div>
+
+
+            <span class="t-14 t-normal">
+              <span aria-hidden="true"><!---->CSI-TSEC (Computer Society of India) · Full-time<!----></span>
+              
+              <span class="visually-hidden"><!---->CSI-TSEC (Computer Society of India) · Full-time<!----></span>
+            </span>
+
+
+          <span class="t-14 t-normal t-black--light">
+            <span aria-hidden="true"><!---->May 2022 - Oct 2022 · 6 mos<!----></span><span class="visually-hidden"><!---->May 2022 - Oct 2022 · 6 mos<!----></span>
+          </span>
+<!---->      
+  </div>
+
+
+<!---->
+      <div class="pvs-entity__action-container">
+<!---->      </div>
+    </div>
+
+<!---->  </div>

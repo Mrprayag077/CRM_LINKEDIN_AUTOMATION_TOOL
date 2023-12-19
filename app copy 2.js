@@ -2038,31 +2038,17 @@ const uuid = require("uuid");
 const secretKey = crypto.randomBytes(32).toString("hex");
 const jwtSecretKey = crypto.randomBytes(32).toString("hex");
 
-app.use(
-  session({
-    secret: secretKey,
-    resave: false, // Set to false to avoid session save on every request
-    saveUninitialized: false, // Set to false to avoid saving uninitialized sessions
-  })
-);
+app.use(session({ secret: secretKey }));
 
 app.use((req, res, next) => {
-  if (
-    (req.path === "/home" || req.path === "/userprofile") &&
-    !req.session.loggedIn
-  ) {
+  if (req.path === "/home" && !req.session.loggedIn) {
     return res.redirect("/login");
   }
-
   next();
 });
 
 app.get("/home", (req, res) => {
   res.render("home");
-});
-
-app.get("/userprofile", (req, res) => {
-  res.render("userp");
 });
 
 app.get("/login", function (req, res) {
@@ -2076,8 +2062,11 @@ app.post("/login", async (req, res) => {
   console.log(email, password);
   try {
     const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password!" });
+    }
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!(user.password == password)) {
       return res.status(400).json({ message: "Invalid email or password!" });
     }
 
@@ -2100,61 +2089,34 @@ const userSchema = new mongoose.Schema({
 const UserModel = mongoose.model("Users", userSchema);
 
 app.post("/register", async (req, res) => {
-  const { username, email, password } = req.query; // Use body instead of query params for security
-
-  console.log(username + " " + email + " " + password);
+  const { uu, ee, pp } = req.query;
 
   try {
-    // Check if user already exists
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(409)
-        .json({ message: "User with this email already exists!" });
+    const existingNote = await UserModel.findOne({ email: ee });
+
+    if (existingNote) {
+      res.json({ message: "User exists" });
+    } else {
+      const newUser = await UserModel.create({
+        username: uu,
+        email: ee,
+        password: pp,
+      });
+      res.json({ message: "User registered successfully!" });
     }
-
-    // Hash password securely before storing
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    console.log("hashcode- " + hashedPassword);
-    // Create new user with hashed password
-    const newUser = await UserModel.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-    });
-
-    // Create JWT token for the newly registered user
-    const token = jwt.sign({ userId: newUser._id, email }, jwtSecretKey, {
-      expiresIn: "1h", // Set token expiry time
-    });
-
-    // Store the token in the session for logged-in state
-    req.session.token = token;
-
-    // Send the token and registration confirmation to the client
-    res.json({ message: "User registered successfully!", token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error registering user!" });
   }
 });
 
-app.get("/logout", (req, res) => {
+app.post("/logout", async (req, res) => {
   // Destroy the session cookie, invalidating the token
-  req.session.destroy((err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Error logging out!" });
-    }
-
-    // Clear the session cookie
-    res.clearCookie("session");
-
-    // Send a response indicating successful logout
-    res.json({ message: "Successfully logged out!" });
+  req.session.destroy(() => {
+    res.clearCookie("session").json({ message: "Successfully logged out!" });
   });
 });
+
 app.listen(process.env.PORT || 6000, function (req, res) {
   console.log("MAIN UI: http://localhost:6000/");
 });

@@ -2025,71 +2025,126 @@ async function testingv110() {
 
 //API'S
 
-app.get("/", function (req, res) {
-  res.send("hiii");
-});
-
 const session = require("express-session");
-
 const crypto = require("crypto");
-const uuid = require("uuid");
+// Configure and use session middleware
 
 // Generate and store secure secret keys
-const secretKey = crypto.randomBytes(32).toString("hex");
+const sessionSecretKey = crypto.randomBytes(32).toString("hex");
 const jwtSecretKey = crypto.randomBytes(32).toString("hex");
 
 app.use(
   session({
-    secret: secretKey,
-    resave: false, // Set to false to avoid session save on every request
-    saveUninitialized: false, // Set to false to avoid saving uninitialized sessions
+    secret: sessionSecretKey,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true, httpOnly: true },
   })
 );
 
-app.use((req, res, next) => {
-  if (
-    (req.path === "/home" || req.path === "/userprofile") &&
-    !req.session.loggedIn
-  ) {
+// Route for the main page
+app.get("/home", async (req, res) => {
+  const token = req.session.token;
+
+  if (!token) {
     return res.redirect("/login");
   }
 
-  next();
+  try {
+    // Verify the JWT token and get user data
+    const decoded = jwt.verify(token, jwtSecretKey);
+    const user = await UserModel.findById(decoded.userId);
+
+    // If the request is an AJAX request, send JSON response
+    if (req.xhr) {
+      return res.json({ message: "Successfully logged in!", user });
+    }
+
+    // Render the home page with user data
+    res.render("home", { user });
+  } catch (error) {
+    console.error(error);
+
+    // If the request is an AJAX request, send JSON response
+    if (req.xhr) {
+      return res
+        .status(401)
+        .json({ message: "Invalid token, redirect to login" });
+    }
+
+    // Invalid token, redirect to login
+    res.redirect("/login");
+  }
 });
 
-app.get("/home", (req, res) => {
-  res.render("home");
+// Route for the user profile page
+app.get("/userprofile", async (req, res) => {
+  const token = req.session.token;
+
+  if (!token) {
+    return res.redirect("/login");
+  }
+
+  try {
+    // Verify the JWT token and get user data
+    const decoded = jwt.verify(token, jwtSecretKey);
+    const user = await UserModel.findById(decoded.userId);
+
+    // Render the user profile page with user data
+    res.render("userpr");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/login"); // Invalid token, redirect to login
+  }
 });
 
-app.get("/userprofile", (req, res) => {
-  res.render("userp");
-});
-
-app.get("/login", function (req, res) {
-  res.render("login"); // Render the login.ejs template
+// Route for the login page
+app.get("/login", (req, res) => {
+  res.render("login"); // Render the login template
 });
 
 app.post("/login", async (req, res) => {
-  // const { email, password } = req.query;
   const { email, password } = req.body;
 
-  console.log(email, password);
   try {
     const user = await UserModel.findOne({ email });
+
+    console.log("user- " + user);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: "Invalid email or password!" });
     }
 
-    // Set the session variable to indicate that the user is logged in
-    req.session.loggedIn = true;
+    // Create a JWT token with user ID and email
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      jwtSecretKey,
+      {
+        expiresIn: "1h", // Set token expiry time
+      }
+    );
 
-    // Redirect the user to the home page
+    // Store the token in the session
+    req.session.token = token;
+
+    // Send the token to the client
+    // res.json({ message: "Successfully logged in!", token });
     res.redirect("/home");
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error logging in user!" });
   }
 });
+
+// Route for logout
+app.post("/logout", async (req, res) => {
+  // Destroy the session cookie, invalidating the token
+  req.session.destroy(() => {
+    res.clearCookie("session").json({ message: "Successfully logged out!" });
+  });
+});
+
+//registration
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
@@ -2140,21 +2195,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.get("/logout", (req, res) => {
-  // Destroy the session cookie, invalidating the token
-  req.session.destroy((err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Error logging out!" });
-    }
-
-    // Clear the session cookie
-    res.clearCookie("session");
-
-    // Send a response indicating successful logout
-    res.json({ message: "Successfully logged out!" });
-  });
-});
-app.listen(process.env.PORT || 6000, function (req, res) {
+app.listen(8000, function (req, res) {
   console.log("MAIN UI: http://localhost:6000/");
 });

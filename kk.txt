@@ -1,0 +1,138 @@
+   await new Promise(resolve => setTimeout(resolve, 2000));
+
+        console.log('i am hereeeeeeeeeeeeeeeeeeeeeee');
+
+        // GET ALL SKILLS IN ARRAY
+
+        const newTab_skills = await browser.newPage();
+        await newTab_skills.goto('https://www.linkedin.com/in/vaishnavi-dhumal-43b0b71b1/details/skills/');
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const selector1 = 'span.mr1.hoverable-link-text.t-bold';
+
+        const textArray = await newTab_skills.evaluate((selector1) => {
+            const spanElements = Array.from(document.querySelectorAll(selector1));
+            const textValues = spanElements.map((span) => {
+                const visuallyHiddenSpan = span.querySelector('span.visually-hidden');
+                return visuallyHiddenSpan ? visuallyHiddenSpan.innerText.trim() : '';
+            });
+            return textValues;
+        }, selector1);
+
+        console.log(textArray);
+
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('i am outt');
+
+        await newTab_skills.close();
+
+        // const buttonSelector = 'button.artdeco-button.artdeco-button--circle.artdeco-button--muted.artdeco-button--3.artdeco-button--tertiary.ember-view';
+
+        // await newTab.waitForSelector(buttonSelector);
+        // await newTab.click(buttonSelector);
+
+
+        //SECTION END: SKILLS----------------------------------------------------------------------------------------------------------------
+
+
+        //more skills options 
+        // const certificate_Section = await newTab_certificate.$('#navigation-index-see-all-licenses-and-certifications');
+        // await certificate_Section.click();
+
+
+
+        // const certificate_buttonSelector = 'button.artdeco-button.artdeco-button--circle.artdeco-button--muted.artdeco-button--3.artdeco-button--tertiary.ember-view';
+
+        // await newTab.waitForSelector(certificate_buttonSelector);
+        // await newTab.click(certificate_buttonSelector);
+
+
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const newTab_certifications = await browser.newPage();
+        await newTab_certifications.goto('https://www.linkedin.com/in/vaishnavi-dhumal-43b0b71b1/details/certifications/');
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const selector_certifications = 'span.mr1.hoverable-link-text.t-bold';
+
+        const textArray_certifications = await newTab_certifications.evaluate((selector2) => {
+            const spanElements = Array.from(document.querySelectorAll(selector2));
+            const textValues = spanElements.map((span) => {
+                const visuallyHiddenSpan = span.querySelector('span.visually-hidden');
+                return visuallyHiddenSpan ? visuallyHiddenSpan.innerText.trim() : '';
+            });
+            return textValues;
+        }, selector_certifications);
+
+        console.log(textArray_certifications);
+
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('i am outt');
+
+        await newTab_certifications.close();
+
+        //--------------------------------------------------------------------------------------------------------------------
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const newTab_exp = await browser.newPage();
+        await newTab_exp.goto('https://www.linkedin.com/in/vaishnavi-dhumal-43b0b71b1/details/experience');
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const selector_exp = 'span.mr1.t-bold';
+        const textArray_exp = await newTab_exp.evaluate((selector3) => {
+            const spanElements = Array.from(document.querySelectorAll(selector3));
+            const textValues = spanElements.map((span) => {
+                const visuallyHiddenSpan = span.querySelector('span.visually-hidden');
+                return visuallyHiddenSpan ? visuallyHiddenSpan.innerText.trim() : '';
+            });
+            return textValues;
+        }, selector_exp);
+
+        console.log(textArray_exp);
+
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('i am outt');
+
+        await newTab_exp.close();
+
+
+
+
+
+
+
+        //--------------------------------------------------------------------------------------------------------------------
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const newTab_education = await browser.newPage();
+        await newTab_education.goto('https://www.linkedin.com/in/vaishnavi-dhumal-43b0b71b1/details/education/');
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        const selector_education = 'span.mr1.hoverable-link-text.t-bold';
+
+        const textArray_education = await newTab_education.evaluate((selector4) => {
+            const spanElements = Array.from(document.querySelectorAll(selector4));
+            const textValues = spanElements.map((span) => {
+                const visuallyHiddenSpan = span.querySelector('span.visually-hidden');
+                return visuallyHiddenSpan ? visuallyHiddenSpan.innerText.trim() : '';
+            });
+            return textValues;
+        }, selector_education);
+
+        console.log(textArray_education);
+
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('i am outt');
+
+        await newTab_education.close();
