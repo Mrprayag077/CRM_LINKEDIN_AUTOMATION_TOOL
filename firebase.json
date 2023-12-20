@@ -1,0 +1,18 @@
+{
+  "hosting": {},
+  "storage": {
+    "rules": [
+      {
+        "bucket": "greenmapper-da4bf.appspot.com",
+        "rules": [
+          {
+            "type": "public",
+            "allUsers": {
+              "read": true
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

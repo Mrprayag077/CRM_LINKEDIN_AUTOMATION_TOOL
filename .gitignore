@@ -1,0 +1,5 @@
+./pages/example.html
+node_modules
+.env
+package.json
+

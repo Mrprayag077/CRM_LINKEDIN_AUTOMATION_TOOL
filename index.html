@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CSV Column Extractor</title>
+
+</head>
+
+<body>
+    <h2>Upload a CSV file and extract a column:</h2>
+    <form id="csvForm" action="/datap" method="post">
+        <input type="file" id="csvFileInput">
+        <br>
+        <br>
+        <button type="submit">Extract Column</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.getElementById('csvForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            extractColumn();
+        });
+
+        function extractColumn() {
+            const fileInput = document.getElementById('csvFileInput');
+            const columnIndex = 0;
+
+            if (fileInput.files.length === 0) {
+                alert("Please select a CSV file to upload.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const fileContent = event.target.result;
+                const lines = fileContent.split('\n');
+
+                const columnData = [];
+                for (let i = 0; i < lines.length; i++) {
+                    const columns = lines[i].split(',');
+                    if (columns.length > columnIndex) {
+                        columnData.push(columns[columnIndex]);
+                    }
+                }
+
+                console.log('Extracted Column Data:', columnData);
+                console.log(columnData[0]);
+
+                axios.post('http://127.0.0.1:3000/datap', { columnData })
+                    .then(function (response) {
+                        console.log('Data sent successfully:', response.data);
+                    })
+                    .catch(function (error) {
+                        console.error('Error sending data:', error);
+                    });
+            };
+
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+
+</html>
