@@ -1516,7 +1516,10 @@ async function testingv1() {
             console.log(err);
         }
 
-        //await followButton.click();
+        // await followButton.click();
+        // await followButton.click();
+        // await followButton.click();
+        // await followButton.click();
 
         async function add_a_note() {
             await newTab.waitForSelector(
