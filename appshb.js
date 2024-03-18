@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 //const User = require("./users");
 const { MongoClient } = require("mongodb");
 const axios = require("axios");
+const { generateKey } = require("crypto");
 require("dotenv").config();
 
 const app = express();
@@ -16,28 +17,24 @@ const password = process.env.PASSWORD;
 mongoose.set("strictQuery", false);
 
 // async function main() {
-mongoose
-  .connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.as6xaod.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+// mongoose.connect(
+//   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.as6xaod.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+//     {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     }
+//   )
+//   .then(() => {
+//     // Connection successful, perform further operations
+//     console.log("Connected to MongoDB");
 
-    // "mongodb+srv://prayag_SIHH:pp1234@cluster0.tuna9.mongodb.net/ats_linkedin?retryWrites=true&w=majority",
-
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    // Connection successful, perform further operations
-    console.log("Connected to MongoDB");
-
-    // ... Your code here ...
-  })
-  .catch((error) => {
-    // Connection failed, handle the error
-    console.log("Failed to connect to MongoDB");
-    console.error(error);
-  });
+//     // ... Your code here ...
+//   })
+//   .catch((error) => {
+//     // Connection failed, handle the error
+//     console.log("Failed to connect to MongoDB");
+//     console.error(error);
+//   });
 
 const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.tuna9.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(MONGO_URL, {
@@ -45,11 +42,7 @@ mongoose.connect(MONGO_URL, {
   useUnifiedTopology: true,
 });
 
-// const usersinfosSchema = {
-//     timestamp: String,
-//     user_name: String,
-//     linkedin_id: String
-// }
+
 
 const usersinfosSchema = {
   profile_link_id: String,
@@ -337,15 +330,16 @@ async function loginToLunchclub() {
 
 //loginToLunchclub();
 
-var profileLinks = ["https://www.linkedin.com/in/gourav-grover-02a82a200/"];
+var profileLinks = ["https://www.linkedin.com/in/abhishek-ithape-7b39621b6/"];
 
 async function linkined() {
-  const usersinfosp = await usersinfos.find({ request_send_trigger: "today" });
+  // const usersinfosp = await usersinfos.find({ request_send_trigger: "today" });
 
-  const profileLinkIds = usersinfosp.map((doc) => doc.profile_link_id);
-  const notes = usersinfosp.map((doc) => doc.notes);
+  // const profileLinkIds = usersinfosp.map((doc) => doc.profile_link_id);
+  // const notes = usersinfosp.map((doc) => doc.notes);
+  let notes = "would like to connect";
 
-  console.log(profileLinkIds);
+  console.log(profileLinks);
   console.log(notes);
 
   const browser = await puppeteer.launch({ headless: false });
@@ -403,13 +397,15 @@ async function linkined() {
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  for (let i = 0; i < profileLinkIds.length; i++) {
+  // for (let i = 0; i < profileLinkIds.length; i++) {
+  for (let i = 0; i < profileLinks.length; i++) {
     // Navigate to the link
     // await newTab.goto('https://www.linkedin.com/company/noveracion-global/');
 
     //  await newTab.goto('https://www.linkedin.com/in/divyanshu-sahu-820467245/');
 
-    await newTab.goto(profileLinkIds[i]);
+    // await newTab.goto(profileLinkIds[i]);
+    await newTab.goto(profileLinks[i]);
 
     // await newTab.setViewport({ width: 1280, height: 720, deviceScaleFactor: 0.7 });
 
@@ -424,14 +420,14 @@ async function linkined() {
       (username_profile_element) => username_profile_element.textContent,
       username_profile_element
     );
-    // console.log(username_profile_page);
+    console.log(username_profile_page);
 
     const header_element = await newTab.$(".text-body-medium");
     const header_profile_page = await newTab.evaluate(
       (header_element) => header_element.textContent,
       header_element
     );
-    // console.log(header_profile_page);
+    console.log(header_profile_page);
 
     console.log("hiii");
 
@@ -439,15 +435,15 @@ async function linkined() {
     // const textContent = await newTab.evaluate(element => element.textContent.trim(), element);
     // console.log(textContent);
 
-    const elements = await newTab.$$(".pv-text-details__left-panel");
+    // const elements = await newTab.$$(".pv-text-details__left-panel");
 
-    const secondDiv = elements[1];
-    const textElement = await secondDiv.$("span.text-body-small");
-    const textContent = await newTab.evaluate(
-      (element) => element.textContent.trim(),
-      textElement
-    );
-    console.log(textContent);
+    // const secondDiv = elements[1];
+    // const textElement = await secondDiv.$("span.text-body-small");
+    // const textContent = await newTab.evaluate(
+    //   (element) => element.textContent.trim(),
+    //   textElement
+    // );
+    // console.log(textContent);
 
     //     const location_element = await newTab.$('.text-body-small');
     //     const location_profile_page = await newTab.evaluate(location_element => location_element.textContent, location_element);
@@ -460,7 +456,22 @@ async function linkined() {
       (aboutus_user_element) => aboutus_user_element.textContent,
       aboutus_user_element
     );
-    //console.log(abotus_user_profile_page);
+    console.log(abotus_user_profile_page);
+
+    // const control_popup = await newTab.$(
+    //   ".artdeco-toast-item__dismiss artdeco-button"
+    // );
+    // const control_user_profile_page = await newTab.evaluate(
+    //   (control_popup) => control_popup.textContent,
+    //   control_popup
+    // );
+    // Control what appears on your profile and if your network is notified of changes you make.View settings
+
+
+
+    generateNote(profileLinks[i], notes);
+
+
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -533,7 +544,8 @@ async function linkined() {
       await newTab.waitForSelector("#custom-message");
       const connect_note_send_message_ = await newTab.$("#custom-message");
       // await connect_note_send_message_.type('Hello, I would like to connect with you!');
-      await connect_note_send_message_.type(notes[i]);
+      // await connect_note_send_message_.type(notes[i]);
+      await connect_note_send_message_.type(notes);
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -586,6 +598,16 @@ async function linkined() {
   }
 }
 
-linkined();
+// linkined();
+
+// let linkedin_link1 = 'https://www.linkedin.com/in/abhishek-ithape-7b39621b6/';
+// let notess = "f";
+async function generateNote() {
+  // https://deepai.org/chat/text-generator
+
+
+};
+
+// generateNote();
 
 app.listen(3000, () => console.log("listening on port 3000"));

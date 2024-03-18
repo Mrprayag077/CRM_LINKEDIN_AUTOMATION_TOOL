@@ -2025,176 +2025,176 @@ async function testingv110() {
 
 //API'S
 
-const session = require("express-session");
-const crypto = require("crypto");
-// Configure and use session middleware
+// const session = require("express-session");
+// const crypto = require("crypto");
+// // Configure and use session middleware
 
-// Generate and store secure secret keys
-const sessionSecretKey = crypto.randomBytes(32).toString("hex");
-const jwtSecretKey = crypto.randomBytes(32).toString("hex");
+// // Generate and store secure secret keys
+// const sessionSecretKey = crypto.randomBytes(32).toString("hex");
+// const jwtSecretKey = crypto.randomBytes(32).toString("hex");
 
-app.use(
-  session({
-    secret: sessionSecretKey,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true, httpOnly: true },
-  })
-);
+// app.use(
+//   session({
+//     secret: sessionSecretKey,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: { secure: true, httpOnly: true },
+//   })
+// );
 
-// Route for the main page
-app.get("/home", async (req, res) => {
-  const token = req.session.token;
+// // Route for the main page
+// app.get("/home", async (req, res) => {
+//   const token = req.session.token;
 
-  if (!token) {
-    return res.redirect("/login");
-  }
+//   if (!token) {
+//     return res.redirect("/login");
+//   }
 
-  try {
-    // Verify the JWT token and get user data
-    const decoded = jwt.verify(token, jwtSecretKey);
-    const user = await UserModel.findById(decoded.userId);
+//   try {
+//     // Verify the JWT token and get user data
+//     const decoded = jwt.verify(token, jwtSecretKey);
+//     const user = await UserModel.findById(decoded.userId);
 
-    // If the request is an AJAX request, send JSON response
-    if (req.xhr) {
-      return res.json({ message: "Successfully logged in!", user });
-    }
+//     // If the request is an AJAX request, send JSON response
+//     if (req.xhr) {
+//       return res.json({ message: "Successfully logged in!", user });
+//     }
 
-    // Render the home page with user data
-    res.render("home", { user });
-  } catch (error) {
-    console.error(error);
+//     // Render the home page with user data
+//     res.render("home", { user });
+//   } catch (error) {
+//     console.error(error);
 
-    // If the request is an AJAX request, send JSON response
-    if (req.xhr) {
-      return res
-        .status(401)
-        .json({ message: "Invalid token, redirect to login" });
-    }
+//     // If the request is an AJAX request, send JSON response
+//     if (req.xhr) {
+//       return res
+//         .status(401)
+//         .json({ message: "Invalid token, redirect to login" });
+//     }
 
-    // Invalid token, redirect to login
-    res.redirect("/login");
-  }
-});
+//     // Invalid token, redirect to login
+//     res.redirect("/login");
+//   }
+// });
 
-// Route for the user profile page
-app.get("/userprofile", async (req, res) => {
-  const token = req.session.token;
+// // Route for the user profile page
+// app.get("/userprofile", async (req, res) => {
+//   const token = req.session.token;
 
-  if (!token) {
-    return res.redirect("/login");
-  }
+//   if (!token) {
+//     return res.redirect("/login");
+//   }
 
-  try {
-    // Verify the JWT token and get user data
-    const decoded = jwt.verify(token, jwtSecretKey);
-    const user = await UserModel.findById(decoded.userId);
+//   try {
+//     // Verify the JWT token and get user data
+//     const decoded = jwt.verify(token, jwtSecretKey);
+//     const user = await UserModel.findById(decoded.userId);
 
-    // Render the user profile page with user data
-    res.render("userpr");
-  } catch (error) {
-    console.error(error);
-    res.redirect("/login"); // Invalid token, redirect to login
-  }
-});
+//     // Render the user profile page with user data
+//     res.render("userpr");
+//   } catch (error) {
+//     console.error(error);
+//     res.redirect("/login"); // Invalid token, redirect to login
+//   }
+// });
 
-// Route for the login page
-app.get("/login", (req, res) => {
-  res.render("login"); // Render the login template
-});
+// // Route for the login page
+// app.get("/login", (req, res) => {
+//   res.render("login"); // Render the login template
+// });
 
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+// app.post("/login", async (req, res) => {
+//   const { email, password } = req.body;
 
-  try {
-    const user = await UserModel.findOne({ email });
+//   try {
+//     const user = await UserModel.findOne({ email });
 
-    console.log("user- " + user);
+//     console.log("user- " + user);
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ message: "Invalid email or password!" });
-    }
+//     if (!user || !(await bcrypt.compare(password, user.password))) {
+//       return res.status(400).json({ message: "Invalid email or password!" });
+//     }
 
-    // Create a JWT token with user ID and email
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      jwtSecretKey,
-      {
-        expiresIn: "1h", // Set token expiry time
-      }
-    );
+//     // Create a JWT token with user ID and email
+//     const token = jwt.sign(
+//       { userId: user._id, email: user.email },
+//       jwtSecretKey,
+//       {
+//         expiresIn: "1h", // Set token expiry time
+//       }
+//     );
 
-    // Store the token in the session
-    req.session.token = token;
+//     // Store the token in the session
+//     req.session.token = token;
 
-    // Send the token to the client
-    // res.json({ message: "Successfully logged in!", token });
-    res.redirect("/home");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error logging in user!" });
-  }
-});
+//     // Send the token to the client
+//     // res.json({ message: "Successfully logged in!", token });
+//     res.redirect("/home");
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error logging in user!" });
+//   }
+// });
 
-// Route for logout
-app.post("/logout", async (req, res) => {
-  // Destroy the session cookie, invalidating the token
-  req.session.destroy(() => {
-    res.clearCookie("session").json({ message: "Successfully logged out!" });
-  });
-});
+// // Route for logout
+// app.post("/logout", async (req, res) => {
+//   // Destroy the session cookie, invalidating the token
+//   req.session.destroy(() => {
+//     res.clearCookie("session").json({ message: "Successfully logged out!" });
+//   });
+// });
 
-//registration
+// //registration
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
+// const userSchema = new mongoose.Schema({
+//   username: { type: String, required: true },
+//   email: { type: String, required: true, unique: true },
+//   password: { type: String, required: true },
+// });
 
-const UserModel = mongoose.model("Users", userSchema);
+// const UserModel = mongoose.model("Users", userSchema);
 
-app.post("/register", async (req, res) => {
-  const { username, email, password } = req.query; // Use body instead of query params for security
+// app.post("/register", async (req, res) => {
+//   const { username, email, password } = req.query; // Use body instead of query params for security
 
-  console.log(username + " " + email + " " + password);
+//   console.log(username + " " + email + " " + password);
 
-  try {
-    // Check if user already exists
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(409)
-        .json({ message: "User with this email already exists!" });
-    }
+//   try {
+//     // Check if user already exists
+//     const existingUser = await UserModel.findOne({ email });
+//     if (existingUser) {
+//       return res
+//         .status(409)
+//         .json({ message: "User with this email already exists!" });
+//     }
 
-    // Hash password securely before storing
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     // Hash password securely before storing
+//     const hashedPassword = await bcrypt.hash(password, 10);
 
-    console.log("hashcode- " + hashedPassword);
-    // Create new user with hashed password
-    const newUser = await UserModel.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-    });
+//     console.log("hashcode- " + hashedPassword);
+//     // Create new user with hashed password
+//     const newUser = await UserModel.create({
+//       username: username,
+//       email: email,
+//       password: hashedPassword,
+//     });
 
-    // Create JWT token for the newly registered user
-    const token = jwt.sign({ userId: newUser._id, email }, jwtSecretKey, {
-      expiresIn: "1h", // Set token expiry time
-    });
+//     // Create JWT token for the newly registered user
+//     const token = jwt.sign({ userId: newUser._id, email }, jwtSecretKey, {
+//       expiresIn: "1h", // Set token expiry time
+//     });
 
-    // Store the token in the session for logged-in state
-    req.session.token = token;
+//     // Store the token in the session for logged-in state
+//     req.session.token = token;
 
-    // Send the token and registration confirmation to the client
-    res.json({ message: "User registered successfully!", token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error registering user!" });
-  }
-});
+//     // Send the token and registration confirmation to the client
+//     res.json({ message: "User registered successfully!", token });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error registering user!" });
+//   }
+// });
 
-app.listen(8000, function (req, res) {
-  console.log("MAIN UI: http://localhost:6000/");
-});
+// app.listen(8000, function (req, res) {
+//   console.log("MAIN UI: http://localhost:6000/");
+// });
