@@ -1531,6 +1531,7 @@ async function testingv1() {
             const connect_note_send_message_ = await newTab.$("#custom-message");
             // await connect_note_send_message_.type('Hello, I would like to connect with you!');
             // await connect_note_send_message_.type(notes[i]);
+            // await connect_note_send_message_.type(notes[i]);
             await connect_note_send_message_.type('hiii i am prayag would like to connect with u');
 
             await new Promise((resolve) => setTimeout(resolve, 3000));
